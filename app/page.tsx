@@ -1,113 +1,127 @@
-import Image from 'next/image'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
-export default function Home() {
+// img
+
+import { currentUser } from '@clerk/nextjs';
+
+
+import logo3 from "../assets/img/notes2.png"
+import discordLogo from "../assets/img/discord.svg"
+import githubLogo from "../assets/img/github.svg"
+import Image from "next/image";
+import {Button} from "../components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import {Activity, CalendarDays, Link, Megaphone, Terminal, User, UserCircle2} from "lucide-react";
+import {Avatar, AvatarFallback, AvatarImage} from "../components/ui/avatar";
+import {ClerkProvider, SignIn, SignInButton, UserButton} from "@clerk/nextjs";
+
+export default async function Home() {
+
+    const user = await currentUser();
+
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex min-h-screen flex-col bg-white items-center justify-start p-8">
+        <Alert className={"mb-8"}>
+            <Megaphone className="h-4 w-4"/>
+            <AlertTitle>Heads up!</AlertTitle>
+            <AlertDescription>
+                Thank you kindly for your understanding as we work on developing Notes. Please be aware that certain features may not function as expected during this process.
+            </AlertDescription>
+        </Alert>
+        <div className={"flex flex-row justify-between w-full h-fit px-8 z-10"}>
+            <a href={"/"} className="flex flex-row items-center text-[1.2vw] mt-0 pt-0 font-extrabold text-[#222] text-center" style={
+                {
+                    letterSpacing: "-1px"
+                }
+            } >
+                    <Image src={logo3} alt="Notes Logo" width={35} height={35} className={"mr-2"} />
+                    Notes
+            </a>
+
+
+            <div className={"flex flex-row"}>
+
+                <div className={"flex flex-row justify-between mr-8"}>
+                    <HoverCard >
+                        <HoverCardTrigger href={"https://github.com"} target={"_blank"} className={"flex items-center justify-center"}>
+                            <Image src={githubLogo} alt="Github Logo" width={18} height={18} className={"mx-2"}/>
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                            <div className="flex justify-between space-x-4">
+                                <Avatar>
+                                    <AvatarImage src={githubLogo} />
+                                    <AvatarFallback>GH</AvatarFallback>
+                                </Avatar>
+                                <div className="space-y-1">
+                                    <h4 className="text-sm font-semibold">@github</h4>
+                                    <p className="text-sm">
+                                        Please feel free to have a look at the Notes source code on Github.
+                                    </p>
+                                    <div className="flex items-center pt-2">
+                                        <Activity className="mr-2 h-4 w-4 opacity-70" />{" "}
+                                        <span className="text-xs text-muted-foreground">
+                Maintained by the Notes team
+              </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </HoverCardContent>
+                    </HoverCard>
+                    <HoverCard >
+                        <HoverCardTrigger href={"https://discord.gg/nrcTd8UWA4"} target={"_blank"} className={"flex items-center justify-center"}>
+                            <Image src={discordLogo} alt="Discord Logo" width={18} height={18} className={"mx-2"}/>
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                            <div className="flex justify-between space-x-4">
+                                <Avatar>
+                                    <AvatarImage src={discordLogo} />
+                                    <AvatarFallback>DC</AvatarFallback>
+                                </Avatar>
+                                <div className="space-y-1">
+                                    <h4 className="text-sm font-semibold">@discord</h4>
+                                    <p className="text-sm">
+                                        Gathering spot for delightful conversations with the Notes community.
+                                    </p>
+                                    <div className="flex items-center pt-2">
+                                        <Activity className="mr-2 h-4 w-4 opacity-70" />{" "}
+                                        <span className="text-xs text-muted-foreground">
+                Maintained by the Notes team
+              </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </HoverCardContent>
+                    </HoverCard>
+                </div>
+
+                    {
+                        !user ? <>
+                        <SignInButton mode={"modal"}>
+                            <Button variant={"outline"} className={"mx-1"}>
+                                <UserCircle2 className={"h-4 w-4 mr-2"} />
+                                Jump In
+                            </Button>
+                        </SignInButton>
+                        </> : <>
+                            <UserButton />
+                        </>
+                    }
+
+
+
+
+
+
+            </div>
         </div>
-      </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
     </main>
   )
 }
