@@ -17,9 +17,11 @@ import {
     HoverCardContent,
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
-import {Activity, CalendarDays, Link, Megaphone, Terminal, User, UserCircle2} from "lucide-react";
+import {Activity, CalendarDays, Megaphone, Terminal, User, UserCircle2} from "lucide-react";
 import {Avatar, AvatarFallback, AvatarImage} from "../components/ui/avatar";
 import {ClerkProvider, SignIn, SignInButton, UserButton} from "@clerk/nextjs";
+import Link from 'next/link'
+
 
 export default async function Home() {
 
@@ -114,13 +116,21 @@ export default async function Home() {
                         </>
                     }
 
-heello there
-
-
-
-
             </div>
         </div>
+        
+
+        <Link href={"/editor"}>
+            <Button>
+                To the Editor!
+            </Button>
+        </Link>
+        <Link href={"/presentations"}>
+            <Button>
+                To the Presentations!
+            </Button>
+        </Link>
+
 
     </main>
   )
